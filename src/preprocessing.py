@@ -1,6 +1,11 @@
 import os
 import pandas as pd
-from utils.helper import test_function
+import sys
+
+# Add the code directory to Python path
+# sys.path.append('/opt/ml/processing/input/code/')
+
+from src.utils.helper import test_function
 
 def load_data(data_path):
     """
@@ -19,7 +24,6 @@ def load_data(data_path):
     
     return df_iris 
  
-
 
 
 # Main execution block
