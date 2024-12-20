@@ -24,7 +24,7 @@ def create_sagemaker_pipeline(
     # Create a pipeline session
     pipeline_session = PipelineSession()
 
-    image_uri = "750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:0.1"
+    image_uri = "750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest"
 
     
     # Preprocessing Step
@@ -83,7 +83,7 @@ def create_sagemaker_pipeline(
         }        
     )
 
-    image_uri = "750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:0.1"
+    image_uri = "750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest" 
 
     custom_estimator = Estimator(
         image_uri=image_uri,
