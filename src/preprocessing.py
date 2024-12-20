@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from src.utils.helper import test_function
+from utils.helper import test_function
 
 def load_data(data_path):
     """
