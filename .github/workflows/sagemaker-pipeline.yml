@@ -1,3 +1,42 @@
+# name: deploy
+
+# on: 
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main]
+    
+# jobs:
+#    rr_train:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+#       - name: Set up Python 3.9
+#         uses: actions/setup-python@v3
+#         with:
+#           python-version: "3.9"
+      
+#       - name: Install requirements
+#         run: pip3 install -r requirements.txt
+      
+#       - name: Fire SageMaker
+#         id: rr_train
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
+#           AWS_DEFAULT_REGION: 'us-east-1'
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           MLFLOW_TRACKING_URI: ${{ secrets.TRACKING_SERVER_ARN }}
+#         run: |
+#             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 750573229682.dkr.ecr.us-east-1.amazonaws.com
+#             docker build -t custom-sagemaker-image .
+#             docker tag custom-sagemaker-image:latest 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
+#             docker push 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
+#             python pipeline.py
+
 name: deploy
 
 on: 
@@ -17,22 +56,24 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.9"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
       
       - name: Install requirements
         run: pip3 install -r requirements.txt
       
       - name: Fire SageMaker
-        id: rr_train
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-1'   # optional: defaults to us-east-1
-          AWS_DEFAULT_REGION: 'us-east-1'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MLFLOW_TRACKING_URI: ${{ secrets.TRACKING_SERVER_ARN }}
         run: |
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 750573229682.dkr.ecr.us-east-1.amazonaws.com
-            docker build -t custom-sagemaker-image .
-            docker tag custom-sagemaker-image:latest 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
-            docker push 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
-            python pipeline.py
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 750573229682.dkr.ecr.us-east-1.amazonaws.com
+          docker build -t custom-sagemaker-image .
+          docker tag custom-sagemaker-image:latest 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
+          docker push 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
+          python pipeline.py
