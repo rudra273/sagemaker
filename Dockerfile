@@ -4,6 +4,7 @@ FROM python:3.9-slim-buster
 COPY  . .
 
 RUN pip3 install --no-cache-dir -r requirements.txt
+RUN  cd src
 
 
 ENV PYTHONUNBUFFERED=TRUE
