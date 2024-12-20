@@ -1,0 +1,41 @@
+name: SageMaker MLflow Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-sagemaker-pipeline:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Docker
+      run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 750573229682.dkr.ecr.us-east-1.amazonaws.com
+          docker build -t custom-sagemaker-image .
+          docker tag custom-sagemaker-image:latest 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
+          docker push 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run SageMaker Pipeline
+      run: python pipeline.py
+      env:
+        MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
