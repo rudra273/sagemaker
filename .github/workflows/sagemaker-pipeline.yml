@@ -31,7 +31,7 @@ jobs:
       - name: Fire SageMaker
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MLFLOW_TRACKING_URI: ${{ secrets.TRACKING_SERVER_ARN }}
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
         run: |
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 750573229682.dkr.ecr.us-east-1.amazonaws.com
           docker build -t custom-sagemaker-image .

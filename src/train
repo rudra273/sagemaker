@@ -62,14 +62,16 @@ def main():
     # Set MLflow tracking URI (if needed)
     tracking_uri = os.environ.get('MLFLOW_TRACKING_URI')
 
-    tracking_uri = 'arn:aws:sagemaker:us-east-1:750573229682:mlflow-tracking-server/mlflow-tracking-server-sagemaker-poc'
+    # tracking_uri = 'arn:aws:sagemaker:us-east-1:750573229682:mlflow-tracking-server/mlflow-tracking-server-sagemaker-poc'
 
     print(tracking_uri)
-    # Set MLflow tracking URI (if needed)
-    # tracking_uri = os.environ.get('MLFLOW_TRACKING_URI')
-    mlflow.set_tracking_uri(tracking_uri)
 
-    # print(tracking_uri)
+    if tracking_uri is None:
+        print('uri not found in environment')
+        tracking_uri = 'arn:aws:sagemaker:us-east-1:750573229682:mlflow-tracking-server/mlflow-tracking-server-sagemaker-poc'
+
+
+    mlflow.set_tracking_uri(tracking_uri) 
     
     # Enable MLflow autologging
     mlflow.autolog()
