@@ -62,7 +62,8 @@ def create_sagemaker_pipeline(
                 output_name='ProcessedData'
             )
         ],
-        code='src/preprocessing.py' 
+        code='src/preprocessing.py' ,
+        source_dir='.'
     )
     
     # Training Step

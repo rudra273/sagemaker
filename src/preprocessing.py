@@ -1,10 +1,12 @@
 import os
 import pandas as pd
-from utils.helper import test_function
+# from utils.helper import test_function
+from src.utils.helper import test_function  # Update the import to include 'src'
+test_function() 
 
-test_function()
 
-# print('helloo') 
+
+# # print('helloo') 
 
 def load_data(data_path):
     """

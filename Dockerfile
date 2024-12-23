@@ -29,11 +29,11 @@ COPY . .
 # Install dependencies
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Set the PYTHONPATH
-ENV PYTHONPATH=/opt/ml/code
+# Set the PYTHONPATH to include both the working directory and src
+ENV PYTHONPATH="${PYTHONPATH}:/opt/ml/code:/opt/ml/code/src"
 
 # Set Python to unbuffered mode
 ENV PYTHONUNBUFFERED=TRUE
 
-# Default command - SageMaker will override this
+# Default command
 CMD ["python3"]
