@@ -1,7 +1,4 @@
 # helper function for module
-
-
-
 def test_function():
-    print("Test Succesfull")
+    print("hello hulu hulu")
     return None

@@ -3,8 +3,6 @@ import sagemaker
 from sagemaker.workflow.pipeline import Pipeline
 from sagemaker.workflow.steps import ProcessingStep, TrainingStep
 from sagemaker.processing import ProcessingInput, ProcessingOutput
-from sagemaker.sklearn.processing import SKLearnProcessor
-from sagemaker.sklearn.estimator import SKLearn
 from sagemaker.workflow.pipeline_context import PipelineSession
 from sagemaker.processing import ScriptProcessor
 from sagemaker.estimator import Estimator
@@ -25,15 +23,6 @@ def create_sagemaker_pipeline(
     pipeline_session = PipelineSession()
 
     image_uri = "750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest"
-
-    # Preprocessing Step
-    sklearn_processor = SKLearnProcessor(
-        framework_version='1.2-1',
-        role=role,
-        instance_type=processing_instance_type,
-        instance_count=1,
-        sagemaker_session=pipeline_session
-    )
 
     script_processor = ScriptProcessor(
     
@@ -65,26 +54,11 @@ def create_sagemaker_pipeline(
         code='src/preprocessing.py' 
     )
     
-    # Training Step
-    sklearn_estimator = SKLearn(
-        entry_point='src/train.py',
-        role=role,
-        instance_type=training_instance_type,
-        framework_version='1.2-1',
-        hyperparameters={
-            'max_leaf_nodes': 30
-        },
-        sagemaker_session=pipeline_session,
-        # Add MLflow tracking configuration
-        environment={
-            'MLFLOW_TRACKING_ARN': os.getenv('MLFLOW_TRACKING_ARN', '')
-        }        
-    )
 
     custom_estimator = Estimator(
         image_uri=image_uri,
-        entry_point='src/train.py',
-        # source_dir='src',
+        entry_point='train.py',
+        source_dir='src', 
         role=role,
         instance_type=training_instance_type, 
         instance_count=1,
@@ -105,7 +79,6 @@ def create_sagemaker_pipeline(
         estimator=custom_estimator, # Use the custom estimator,
         inputs={
             'train': processing_step.properties.ProcessingOutputConfig.Outputs['ProcessedData'].S3Output.S3Uri
-            # 'train': f'{input_data_uri}/processed/'
         },
         depends_on=[processing_step]
     )

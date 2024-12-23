@@ -1,10 +1,11 @@
-
 import argparse
 import os
 import joblib
 import pandas as pd
 import mlflow
 from sklearn import tree
+from utils.helper import test_function
+test_function()
 
 def train(train_data, max_leaf_nodes=-1):
     """
