@@ -83,8 +83,8 @@ def create_sagemaker_pipeline(
 
     custom_estimator = Estimator(
         image_uri=image_uri,
-        # entry_point='train.py',
-        entry_point='/opt/ml/code/src/train.py', 
+        entry_point='src/train.py',  
+        source_dir='.',  
         role=role,
         instance_type=training_instance_type, 
         instance_count=1,

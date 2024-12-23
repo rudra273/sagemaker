@@ -20,20 +20,20 @@
 
 FROM python:3.9-slim-buster
 
-# Create and set the working directory
+# Set working directory
 WORKDIR /opt/ml/code
 
-# Copy all project files to the working directory
+# Copy all files into the container
 COPY . .
 
 # Install dependencies
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Set the PYTHONPATH to include the source directory
+# Set the PYTHONPATH
 ENV PYTHONPATH=/opt/ml/code
 
-# Ensure Python output is not buffered
+# Set Python to unbuffered mode
 ENV PYTHONUNBUFFERED=TRUE
 
-# Set the entrypoint
-ENTRYPOINT ["python3"]
+# Default command - SageMaker will override this
+CMD ["python3"]
