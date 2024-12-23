@@ -61,6 +61,12 @@ def main():
     
     # Set MLflow tracking URI (if needed)
     tracking_uri = os.environ.get('MLFLOW_TRACKING_URI')
+
+    tracking_uri = 'arn:aws:sagemaker:us-east-1:750573229682:mlflow-tracking-server/mlflow-tracking-server-sagemaker-poc'
+
+    print(tracking_uri)
+    # Set MLflow tracking URI (if needed)
+    tracking_uri = os.environ.get('MLFLOW_TRACKING_URI')
     if tracking_uri:
         mlflow.set_tracking_uri(tracking_uri)
 
