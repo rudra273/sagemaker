@@ -24,11 +24,13 @@ FROM python:3.9-slim-buster
 # Copy all project files, including the src directory
 COPY . .
 
+WORKDIR /src
+
 # Install dependencies
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Set the PYTHONPATH to include the src directory
-# ENV PYTHONPATH=/app/src
+ENV PYTHONPATH=/src
 
 # Ensure Python output is not buffered
 ENV PYTHONUNBUFFERED=TRUE
