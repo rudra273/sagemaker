@@ -77,7 +77,7 @@ def main():
         
         # Save the model
         joblib.dump(clf, os.path.join(args.model_dir, "model.joblib"))
-        
+        print(args.model_dir)
         # Register the model with MLflow
         mlflow.sklearn.log_model(
             sk_model=clf, 
