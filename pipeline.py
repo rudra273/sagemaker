@@ -63,7 +63,6 @@ def create_sagemaker_pipeline(
             )
         ],
         code='src/preprocessing.py' ,
-        source_dir='.'
     )
     
     # Training Step
