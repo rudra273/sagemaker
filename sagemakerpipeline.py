@@ -14,7 +14,7 @@ def create_sagemaker_pipeline(
     sagemaker_session, 
     input_data_uri, 
     processing_instance_type='ml.c4.xlarge',
-    training_instance_type='ml.c4.xlarge'
+    training_instance_type='ml.c4.xlarge' 
 ):
     """
     Create a SageMaker Pipeline for MLflow model training and deployment
