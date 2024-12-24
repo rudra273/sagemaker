@@ -37,4 +37,4 @@ jobs:
           docker build -t custom-sagemaker-image .
           docker tag custom-sagemaker-image:latest 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
           docker push 750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest
-          python pipeline.py
+          # python pipeline.py

@@ -3,10 +3,8 @@ import os
 import joblib
 import pandas as pd
 import mlflow
-
-print("new train file")
-
 from sklearn import tree
+
 from utils.helper import test_function
 test_function()
 
@@ -70,7 +68,7 @@ def main():
         print('uri not found in environment')
         tracking_uri = 'arn:aws:sagemaker:us-east-1:750573229682:mlflow-tracking-server/mlflow-tracking-server-sagemaker-poc'
 
-    print(tracking_uri)
+    print(tracking_uri) 
 
     mlflow.set_tracking_uri(tracking_uri) 
     

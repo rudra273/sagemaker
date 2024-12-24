@@ -12,8 +12,10 @@ def create_sagemaker_pipeline(
     input_data_uri,
     output_data_uri,
     model_output_uri,
+    deploy_output_uri,
     processing_instance_type='ml.t3.medium',
-    training_instance_type='ml.c4.xlarge'
+    training_instance_type='ml.c4.xlarge',
+    deployment_instance_type='ml.m5.large',
 ):
     """
     Create a SageMaker Pipeline using preprocessing and training scripts with ScriptProcessor.
@@ -24,7 +26,7 @@ def create_sagemaker_pipeline(
 
     image_uri = "750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest"
 
-    # ScriptProcessor for preprocessing
+    # ScriptProcessor for preprocessing --------------------------------
     script_processor = ScriptProcessor(
         image_uri=image_uri,
         command=["python3"],
@@ -54,7 +56,7 @@ def create_sagemaker_pipeline(
         code='src/preprocessing.py'
     )
 
-    # ScriptProcessor for training
+    # ScriptProcessor for training -------------------------------------
     training_processor = ScriptProcessor(
         image_uri=image_uri,
         command=["python3"],
@@ -84,10 +86,42 @@ def create_sagemaker_pipeline(
         code='src/train.py'
     )
 
+
+    # ScriptProcessor for deployment
+    deployment_processor = ScriptProcessor(
+        image_uri=image_uri,
+        command=["python3"],
+        role=role,
+        instance_type=deployment_instance_type,
+        instance_count=1,
+        sagemaker_session=pipeline_session
+    )
+
+    # Deployment step ------------------------------------------------
+    deployment_step = ProcessingStep(
+        name='DeployIrisModel',
+        processor=deployment_processor,
+        inputs=[
+            ProcessingInput(
+                source=training_step.properties.ProcessingOutputConfig.Outputs['ModelArtifacts'].S3Output.S3Uri,
+                destination='/opt/ml/processing/input/model'
+            )
+        ],
+        outputs=[
+            ProcessingOutput(
+                source='/opt/ml/processing/output',
+                destination=deploy_output_uri,
+                output_name='DeploymentArtifacts'
+            )
+        ],
+        code='src/deploy.py'
+    )
+
+
     # Create pipeline
     pipeline = Pipeline(
         name='iris-mlflow-pipeline',
-        steps=[processing_step, training_step],
+        steps=[processing_step, training_step, deployment_step],
         sagemaker_session=pipeline_session
     )
 
@@ -104,6 +138,7 @@ def main():
     input_data_uri = "s3://mlflow-sagemaker-us-east-1-750573229682/iris-dataset/"
     output_data_uri = "s3://mlflow-sagemaker-us-east-1-750573229682/iris-output/"
     model_output_uri = "s3://mlflow-sagemaker-us-east-1-750573229682/iris-model-output/"
+    deploy_output_uri = "s3://mlflow-sagemaker-us-east-1-750573229682/iris-deploy-output/"
 
     # Create pipeline
     pipeline = create_sagemaker_pipeline(
@@ -111,7 +146,8 @@ def main():
         sagemaker_session,
         input_data_uri,
         output_data_uri,
-        model_output_uri
+        model_output_uri,
+        deploy_output_uri,
     )
 
     # Upsert pipeline
