@@ -15,7 +15,7 @@ def create_sagemaker_pipeline(
     deploy_output_uri,
     processing_instance_type='ml.t3.medium',
     training_instance_type='ml.c4.xlarge',
-    deployment_instance_type='ml.m5.large',
+    deployment_instance_type='ml.t3.medium',
 ):
     """
     Create a SageMaker Pipeline using preprocessing and training scripts with ScriptProcessor.
