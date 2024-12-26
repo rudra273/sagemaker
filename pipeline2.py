@@ -121,7 +121,7 @@ def create_sagemaker_pipeline(
     # Create pipeline
     pipeline = Pipeline(
         name='iris-mlflow-pipeline',
-        steps=[processing_step, training_step, deployment_step],
+        steps=[processing_step, training_step],
         sagemaker_session=pipeline_session
     )
 
@@ -165,3 +165,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

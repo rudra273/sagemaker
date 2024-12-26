@@ -1,7 +1,11 @@
-scikit-learn==1.1.2
+# scikit-learn==1.1.2
+scikit-learn==1.2.1
 sagemaker==2.215.0
 mlflow==2.13.2
 sagemaker-mlflow==0.1.0
 python-dotenv==1.0.0 
 fsspec==2024.10.0
 s3fs==2024.10.0
+cloudpickle==2.2.1
+
+

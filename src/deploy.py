@@ -38,75 +38,44 @@ def get_latest_model_source(model_name):
     registered_model = client.get_registered_model(name=model_name)
     return registered_model.latest_versions[0].source
 
-def create_sagemaker_model(
-    source_path, 
-    role_arn, 
-    sample_input, 
-    sample_output
-):
-    """
-    Create and deploy a SageMaker model
-    
-    Args:
-        source_path (str): MLflow model source path
-        role_arn (str): AWS IAM role ARN
-        sample_input (np.ndarray): Sample input for schema building
-        sample_output (int): Sample output for schema building
-    
-    Returns:
-        sagemaker.predictor.Predictor: Deployed model predictor
-    """
-    # Create schema builder
-    schema_builder = SchemaBuilder(
-        sample_input=sample_input,
-        sample_output=sample_output,
-    )
-    
-    # Create model builder
-    model_builder = ModelBuilder(
-        mode=Mode.SAGEMAKER_ENDPOINT,
-        schema_builder=schema_builder,
-        role_arn=role_arn,
-        model_metadata={"MLFLOW_MODEL_PATH": source_path},
-    )
-    
-    # Build and deploy the model
-    built_model = model_builder.build()
-    predictor = built_model.deploy(
-        initial_instance_count=1, 
-        instance_type="ml.m5.large"
-    )
-    
-    return predictor
 
 def main():
-    # Get SageMaker session and role
-    # sagemaker_session = sagemaker.Session()
-    # role = get_execution_role()
 
-    # Set region explicitly
-    region_name = "us-east-1"  # Change to your desired AWS region
+    region_name = "us-east-1" 
     boto3.setup_default_session(region_name=region_name)
     sagemaker_session = Session()
 
-    role = get_execution_role(sagemaker_session=sagemaker_session)
+    # role = get_execution_role(sagemaker_session=sagemaker_session)
 
     role = 'arn:aws:iam::750573229682:role/service-role/AmazonSageMaker-ExecutionRole-20241211T150457'
-
-    # Sample input for model schema (replace with your actual sample)
-    sklearn_input = np.array([1.0, 2.0, 3.0, 4.0]).reshape(1, -1)
-    sklearn_output = 1
     
     # Get the latest model source from MLflow
-    source_path = get_latest_model_source("sm-job-experiment-model")
-    
-    # Deploy the model
-    predictor = create_sagemaker_model(
-        source_path, 
-        role, 
-        sklearn_input, 
-        sklearn_output
+    # source_path = get_latest_model_source("sm-job-experiment-model")
+
+    source_path = 's3://sagemaker-studio-750573229682-fffkyjouino/models/0/bc53242cf8d84f3b94b372d8a61095a8/artifacts/model'
+
+    # 's3://sagemaker-studio-750573229682-fffkyjouino/models/0/dbc726cddd324a97b62ad4d84943f8d1/artifacts/model'
+    # 's3://sagemaker-studio-750573229682-fffkyjouino/models/0/bc53242cf8d84f3b94b372d8a61095a8/artifacts/model' # working model
+
+    sklearn_input = np.array([1.0, 2.0, 3.0, 4.0]).reshape(1, -1)
+    sklearn_output = 1
+    sklearn_schema_builder = SchemaBuilder(
+        sample_input=sklearn_input,
+        sample_output=sklearn_output,
     )
+
+    # Create model builder with the schema builder.
+    model_builder = ModelBuilder(
+        mode=Mode.SAGEMAKER_ENDPOINT,
+        schema_builder=sklearn_schema_builder,
+        role_arn=role,
+        model_metadata={"MLFLOW_MODEL_PATH": source_path},
+    )
+
+    built_model = model_builder.build()
+
+    predictor = built_model.deploy(initial_instance_count=1, instance_type="ml.m5.large")
+
     
     # Optional: Test the predictor
     prediction = predictor.predict(sklearn_input)
@@ -115,4 +84,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-    
