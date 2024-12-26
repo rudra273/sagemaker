@@ -52,7 +52,7 @@ def main():
     # Get the latest model source from MLflow
     # source_path = get_latest_model_source("sm-job-experiment-model")
 
-    source_path = 's3://sagemaker-studio-750573229682-fffkyjouino/models/0/847ddec4083c4528978be6ce386cd902/artifacts/model'
+    source_path = 's3://sagemaker-studio-750573229682-fffkyjouino/models/0/fbef66f078684ff1bcdba51579e9b5cc/artifacts/model'
 
     # 's3://sagemaker-studio-750573229682-fffkyjouino/models/0/dbc726cddd324a97b62ad4d84943f8d1/artifacts/model'
     # 's3://sagemaker-studio-750573229682-fffkyjouino/models/0/bc53242cf8d84f3b94b372d8a61095a8/artifacts/model' # working model
