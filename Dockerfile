@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.9.21-bullseye
 
 # Copy all project files, including the src directory
 COPY . .
