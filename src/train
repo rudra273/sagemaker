@@ -95,21 +95,6 @@ def main():
     model_details = mlflow.register_model(model_uri=model_uri, name="sm-job-experiment-model")
 
 
-    
-    # # Train the model
-    # with mlflow.start_run():
-    #     clf = train(train_data, args.max_leaf_nodes)
-        
-    #     # Save the model
-    #     joblib.dump(clf, os.path.join(args.model_dir, "model.joblib"))
-    #     print(args.model_dir)
-    #     # Register the model with MLflow
-    #     mlflow.sklearn.log_model(
-    #         sk_model=clf, 
-    #         artifact_path="model", 
-    #         registered_model_name="sm-job-experiment-model"
-    #     )
-
 
 if __name__ == '__main__':
     main()

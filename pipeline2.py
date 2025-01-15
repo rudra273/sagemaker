@@ -26,7 +26,7 @@ def create_sagemaker_pipeline(
 
     image_uri = "750573229682.dkr.ecr.us-east-1.amazonaws.com/custom-sagemaker-image:latest"
 
-    # ScriptProcessor for preprocessing --------------------------------
+    # ScriptProcessor for preprocessing 
     script_processor = ScriptProcessor(
         image_uri=image_uri,
         command=["python3"],
@@ -43,7 +43,7 @@ def create_sagemaker_pipeline(
         inputs=[
             ProcessingInput(
                 source=input_data_uri,
-                destination='/opt/ml/processing/input'
+                destination='/opt/ml/processing/input' 
             )
         ],
         outputs=[
@@ -56,7 +56,7 @@ def create_sagemaker_pipeline(
         code='src/preprocessing.py'
     )
 
-    # ScriptProcessor for training -------------------------------------
+    # ScriptProcessor for training 
     training_processor = ScriptProcessor(
         image_uri=image_uri,
         command=["python3"],
@@ -97,7 +97,7 @@ def create_sagemaker_pipeline(
         sagemaker_session=pipeline_session
     )
 
-    # Deployment step ------------------------------------------------
+    # Deployment step
     deployment_step = ProcessingStep(
         name='DeployIrisModel',
         processor=deployment_processor,

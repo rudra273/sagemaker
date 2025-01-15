@@ -62,7 +62,6 @@ def main():
     # Set MLflow tracking URI (if needed)
     tracking_uri = os.environ.get('MLFLOW_TRACKING_URI')
 
-    print(tracking_uri)
 
     if tracking_uri is None:
         print('uri not found in environment')
@@ -73,7 +72,7 @@ def main():
     mlflow.set_tracking_uri(tracking_uri) 
     
     # Enable MLflow autologging
-    mlflow.autolog()
+    mlflow.autolog() 
 
     print("Autologging enabled") 
 

@@ -45,19 +45,19 @@ def create_deployment_pipeline(
     deployment_step = ProcessingStep(
         name='DeployIrisModel',
         processor=deployment_processor,
-        inputs=[
-            ProcessingInput(
-                source=model_artifacts_uri,
-                destination='/opt/ml/processing/input/model'
-            )
-        ],
-        outputs=[
-            ProcessingOutput(
-                source='/opt/ml/processing/output',
-                destination=deploy_output_uri,
-                output_name='DeploymentArtifacts'
-            )
-        ],
+        # inputs=[
+        #     ProcessingInput(
+        #         source=model_artifacts_uri,
+        #         destination='/opt/ml/processing/input/model'
+        #     )
+        # ],
+        # outputs=[
+        #     ProcessingOutput(
+        #         source='/opt/ml/processing/output',
+        #         destination=deploy_output_uri,
+        #         output_name='DeploymentArtifacts'
+        #     )
+        # ],
         code='src/deploy.py'
     )
 
